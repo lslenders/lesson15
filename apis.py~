@@ -1,0 +1,31 @@
+import requests
+
+
+
+def get_latlon(query):
+	"""
+	Get latitude and longitude from Google api for a place
+	
+	Args:
+		query (str): place to geocode
+	Returns:
+		location in latlon
+	"""
+	result = requests.get("http://maps.googleapis.com/maps/api/geocode/json?address={}".format(query))
+	location = result.json()['results'][0]['geometry']['location']
+	return location
+
+def get_height_ahn2(wkt_point):
+	"""
+	Get AHN2 height for wkt geometry
+
+	Args:
+		wkt_geom: geometry as WKT
+
+	Returns:
+		height in mNAP
+	"""
+	result = requests.get("https://nxt.staging.lizard.net/api/v2/raster-aggregates/?page_size=0&agg=curve&geom={}&raster_names=dem%2Fnl&srs=EPSG:4326&start=2015-01-14T21:01:01&stop=2015-01-21T21:01:01&window=3600000".format(wkt_point), verify=False)
+    	height = result.json()['data'][0]
+
+
